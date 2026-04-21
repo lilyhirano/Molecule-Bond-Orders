@@ -193,3 +193,23 @@ void fock_diagonal_elements(const Molecule& mol, const arma::mat& gamma_atom, co
 void fock_off_diagonal_elements(const Molecule& mol, const arma::mat& gamma_atom, const arma::mat& overlap,
                                 const arma::mat& P_spin, arma::mat& F_spin);
 
+
+class Visualize{
+    public:
+        explicit Visualize(const Molecule& mol);
+        ~Visualize() = default;
+
+        void visualize(const string& filename);
+    private:
+        const Molecule& molecule;
+        vtkNew<vtkRenderer> renderer;
+        vtkNew<vtkRenderWindow> renderWindow;
+        vtkNew<vtkRenderWindowInteractor> renderWindowInteractor;
+        vtkNew<vtkMoleculeMapper> moleculeMapper;
+        vtkNew<vtkActor> moleculeActor;
+        vtkNew<vtkNamedColors> colors;
+        vtkNew<vtkCMLMoleculeReader> moleculeReader;
+        vtkNew<vtkCamera> camera;
+
+
+};
