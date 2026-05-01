@@ -62,6 +62,8 @@ add_executable(
     src/fock_functions.cpp
     src/sto3g_functions.cpp
     src/visualize.cpp
+    src/bond_order.cpp
+    src/electron_density.cpp
 )
 
 vtk_module_autoinit(

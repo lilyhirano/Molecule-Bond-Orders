@@ -1,3 +1,3 @@
 #!/bin/sh
 
-pytest . --verbose
+python3 -m pytest -s -v tests

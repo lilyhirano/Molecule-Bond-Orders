@@ -6,7 +6,9 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     cmake \
     git \
+    ninja-build \
     ca-certificates \
+    wget \
     libvtk9-dev \
     nlohmann-json3-dev \
     libhdf5-dev \
@@ -33,6 +35,21 @@ RUN git clone --depth 1 https://github.com/chemfiles/chemfiles.git /tmp/chemfile
     && cmake --build /tmp/chemfiles/build -j"$(nproc)" \
     && cmake --install /tmp/chemfiles/build \
     && rm -rf /tmp/chemfiles
+
+RUN wget -q https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh -O /tmp/miniforge.sh \
+    && bash /tmp/miniforge.sh -b -p /opt/conda \
+    && rm /tmp/miniforge.sh \
+    && /opt/conda/bin/conda config --system --set always_yes true \
+    && /opt/conda/bin/conda config --system --set channel_priority flexible
+
+COPY environment.yml /tmp/environment.yml
+
+RUN /opt/conda/bin/conda env create -f /tmp/environment.yml \
+    && /opt/conda/bin/conda clean -afy \
+    && rm /tmp/environment.yml
+
+ENV PATH=/opt/conda/envs/molecule-viz/bin:$PATH
+ENV LD_LIBRARY_PATH=/opt/conda/envs/molecule-viz/lib
 
 WORKDIR /app
 COPY . .

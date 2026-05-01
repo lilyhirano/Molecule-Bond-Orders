@@ -213,3 +213,75 @@ class Visualize{
 
 
 };
+
+
+class BondOrder{
+    public:
+         BondOrder(const Molecule& mol) : molecule(mol)
+         {
+            FockMatrix fock_matrix(molecule);
+            fock_matrix.find_convergence(); //read converged density matrix
+            density_matrix_alpha = fock_matrix.get_density_matrix_alpha();
+            density_matrix_beta = fock_matrix.get_density_matrix_beta();
+            density_matrix_total = density_matrix_alpha + density_matrix_beta;
+
+            int num_atoms = molecule.num_atoms;
+            mulliken_bond_order_matrix = arma::zeros(num_atoms, num_atoms);
+            mayer_bond_order_matrix = arma::zeros(num_atoms, num_atoms);
+            wiberg_bond_order_matrix = arma::zeros(num_atoms, num_atoms);
+            X_matrix = arma::zeros(molecule.num_basis_functions, molecule.num_basis_functions);
+
+            calculate_X_matrix();
+            calculate_wiberg_bond_order(); 
+            calculate_mayer_bond_order();
+            calculate_mulliken_bond_order();
+         };
+        ~BondOrder() = default;
+
+        arma::mat get_mulliken_bond_order_matrix() const { return mulliken_bond_order_matrix; }
+        arma::mat get_mayer_bond_order_matrix() const { return mayer_bond_order_matrix; }
+        arma::mat get_wiberg_bond_order_matrix() const { return wiberg_bond_order_matrix; }
+        arma::mat get_density_matrix_total() const { return density_matrix_total; }
+        arma::mat get_X_matrix() const { return X_matrix; }
+
+    private:
+        const Molecule& molecule;
+        arma::mat density_matrix_alpha;
+        arma::mat density_matrix_beta;
+        arma::mat density_matrix_total;
+        arma::mat mulliken_bond_order_matrix;
+        arma::mat mayer_bond_order_matrix;
+        arma::mat wiberg_bond_order_matrix;
+        arma::mat X_matrix;
+
+        void calculate_wiberg_bond_order();
+        void calculate_mayer_bond_order();
+        void calculate_mulliken_bond_order();
+        void calculate_X_matrix();
+
+};
+
+class ElectronDensity{
+    public:
+    ElectronDensity(const Molecule& mol) : molecule(mol)
+    {
+        FockMatrix fock_matrix(molecule);
+        fock_matrix.find_convergence();
+        density_matrix_total =
+            fock_matrix.get_density_matrix_alpha() + fock_matrix.get_density_matrix_beta();
+        calculate_electron_density();
+    }
+
+    ~ElectronDensity() = default;   
+
+    arma::mat get_electron_density_matrix() const { return electron_density_matrix; }
+    double get_electron_density() const { return electron_density; }
+
+    private:
+        const Molecule& molecule;
+        arma::mat electron_density_matrix;
+        arma::mat density_matrix_total;
+        double electron_density = 0.0;
+
+        void calculate_electron_density();
+};

@@ -1,0 +1,28 @@
+Overlap matrix:
+   1.0000   0.6599
+   0.6599   1.0000
+
+Orthogonal overlap matrix:
+   1.2454  -0.4692
+  -0.4692   1.2454
+
+Total density matrix:
+   1.0000   1.0000
+   1.0000   1.0000
+
+Wiberg bond order matrix:
+        0   1.0000
+   1.0000        0
+
+Mayer bond order matrix:
+        0   1.3776
+   1.3776        0
+
+Mulliken bond order matrix:
+        0   1.3197
+   1.3197        0
+
+Electron density matrix:
+   1.6599
+   1.6599
+
