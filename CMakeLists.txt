@@ -1,31 +1,11 @@
 cmake_minimum_required(VERSION 3.20)
 
-project(Molecule-Visualization LANGUAGES C CXX)
+project(molecule_bond_order LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 20) 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-#edit as needed
-find_package(VTK COMPONENTS 
-  CommonColor
-  CommonCore
-  DomainsChemistry
-  DomainsChemistryOpenGL2
-  IOChemistry
-  InteractionStyle
-  RenderingContextOpenGL2
-  RenderingCore
-  RenderingFreeType
-  RenderingGL2PSOpenGL2
-  RenderingOpenGL2
-)
-
-if (NOT VTK_FOUND)
-  message(FATAL_ERROR "Molecule-Visualization: Unable to find the VTK build folder.")
-endif()
-
 
 find_package(nlohmann_json REQUIRED)
 find_package(HDF5 REQUIRED)
@@ -45,7 +25,6 @@ target_link_libraries(common INTERFACE
     HDF5::HDF5
     chemfiles
 )
-target_link_libraries(common INTERFACE ${VTK_LIBRARIES})
 
 target_compile_definitions(common INTERFACE 
     ARMA_USE_HDF5
@@ -56,17 +35,11 @@ link_libraries(common)
 
 
 add_executable(
-    Molecule-Visualization
+    molecule_bond_order
     src/main.cpp
     src/molecule_functions.cpp
     src/fock_functions.cpp
     src/sto3g_functions.cpp
-    src/visualize.cpp
     src/bond_order.cpp
     src/electron_density.cpp
-)
-
-vtk_module_autoinit(
-  TARGETS Molecule-Visualization
-  MODULES ${VTK_LIBRARIES}
 )

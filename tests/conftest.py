@@ -7,7 +7,7 @@ import pytest
 BASE_DIR = pathlib.Path(__file__).parent.parent
 INPUT_DIR = BASE_DIR / "sample_input" / "final_proj"
 BINARY_DIR = BASE_DIR / "build"
-EXECUTABLE_PATH = BINARY_DIR / "Molecule-Visualization"
+EXECUTABLE_PATH = BINARY_DIR / "molecule_bond_order"
 PREFERRED_OUTPUT_SUBDIR = BASE_DIR / "project_output" / "final_proj"
 PREFERRED_HDF5_SUBDIR = BASE_DIR / "project_output" / "final_proj_hdf5"
 FALLBACK_OUTPUT_SUBDIR = pathlib.Path("/tmp/qc279_pytest_output/final_proj")

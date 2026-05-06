@@ -1,4 +1,4 @@
-# include "molecule_visualization.hpp"
+# include "molecule_bond_order.hpp"
 
 void ElectronDensity::calculate_electron_density(){
     const int num_atoms = molecule.num_atoms;

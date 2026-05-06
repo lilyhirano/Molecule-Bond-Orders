@@ -9,7 +9,6 @@ RUN apt-get update && apt-get install -y \
     ninja-build \
     ca-certificates \
     wget \
-    libvtk9-dev \
     nlohmann-json3-dev \
     libhdf5-dev \
     libarmadillo-dev \
@@ -48,8 +47,7 @@ RUN /opt/conda/bin/conda env create -f /tmp/environment.yml \
     && /opt/conda/bin/conda clean -afy \
     && rm /tmp/environment.yml
 
-ENV PATH=/opt/conda/envs/molecule-viz/bin:$PATH
-ENV LD_LIBRARY_PATH=/opt/conda/envs/molecule-viz/lib
+ENV PATH=/opt/conda/envs/molecule_bond_order/bin:$PATH
 
 WORKDIR /app
 COPY . .

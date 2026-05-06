@@ -2,7 +2,7 @@
 #include <cmath>
 #include <vector>
 
-#include "molecule_visualization.hpp"
+#include "molecule_bond_order.hpp"
 
 
 constexpr double EV_PER_HARTREE = 27.211324570273;
