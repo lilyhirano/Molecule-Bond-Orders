@@ -1,10 +1,10 @@
 #!/bin/sh
-IMAGE_NAME="${IMAGE_NAME:-molecule-visualization:latest}"
+IMAGE_NAME="${IMAGE_NAME:-molecule_bond_order:latest}"
 
 docker run \
   --rm \
   -it \
-  --name molecule-visualization \
+  --name molecule_bond_order \
   --user "$(id -u):$(id -g)" \
   -e HOME=/tmp \
   -v /etc/passwd:/etc/passwd:ro \

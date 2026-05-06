@@ -6,7 +6,7 @@
 #include <stdexcept>
 #include <armadillo>
 #include <nlohmann/json.hpp>
-#include "molecule_visualization.hpp"
+#include "molecule_bond_order.hpp"
 
 using namespace std;
 using json = nlohmann::json; 

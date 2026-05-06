@@ -1,10 +1,9 @@
-name: molecule-viz
+name: molecule_bond_order
 channels:
   - conda-forge
   - nodefaults
 dependencies:
   - python=3.11
-  - psi4
   - conda-forge/label/libint_dev::libint
   - pytest
   - pytest-cov

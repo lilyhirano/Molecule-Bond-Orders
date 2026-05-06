@@ -8,16 +8,6 @@
 #include <nlohmann/json.hpp>
 
 
-#include <vtkActor.h>
-#include <vtkCMLMoleculeReader.h>
-#include <vtkCamera.h>
-#include <vtkMoleculeMapper.h>
-#include <vtkNamedColors.h>
-#include <vtkNew.h>
-#include <vtkProperty.h>
-#include <vtkRenderWindow.h>
-#include <vtkRenderWindowInteractor.h>
-#include <vtkRenderer.h>
 
 using json = nlohmann::json; 
 namespace fs = std::filesystem;
@@ -192,27 +182,6 @@ void fock_diagonal_elements(const Molecule& mol, const arma::mat& gamma_atom, co
                             const arma::mat& P_spin, arma::mat& F_spin);
 void fock_off_diagonal_elements(const Molecule& mol, const arma::mat& gamma_atom, const arma::mat& overlap,
                                 const arma::mat& P_spin, arma::mat& F_spin);
-
-
-class Visualize{
-    public:
-        explicit Visualize(const Molecule& mol);
-        ~Visualize() = default;
-
-        void visualize(const string& filename);
-    private:
-        const Molecule& molecule;
-        vtkNew<vtkRenderer> renderer;
-        vtkNew<vtkRenderWindow> renderWindow;
-        vtkNew<vtkRenderWindowInteractor> renderWindowInteractor;
-        vtkNew<vtkMoleculeMapper> moleculeMapper;
-        vtkNew<vtkActor> moleculeActor;
-        vtkNew<vtkNamedColors> colors;
-        vtkNew<vtkCMLMoleculeReader> moleculeReader;
-        vtkNew<vtkCamera> camera;
-
-
-};
 
 
 class BondOrder{
