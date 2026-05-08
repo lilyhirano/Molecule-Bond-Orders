@@ -1,0 +1,6 @@
+{
+    "atoms_file_path": "/work/atoms/HCN.xyz",
+    "output_file_path": "/work/project_output/final_proj_hdf5/HCN.hdf5",
+    "num_alpha_electrons": 5,
+    "num_beta_electrons": 5
+}

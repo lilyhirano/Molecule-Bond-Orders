@@ -1,0 +1,6 @@
+{
+    "atoms_file_path": "/work/atoms/H2.xyz",
+    "output_file_path": "/work/project_output/final_proj_hdf5/H2.hdf5",
+    "num_alpha_electrons": 1,
+    "num_beta_electrons": 1
+}

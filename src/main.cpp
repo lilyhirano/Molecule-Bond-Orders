@@ -36,8 +36,7 @@ int main(int argc, char* argv[]) {
     molecule.build_overlap_matrix();
 
     BondOrder bond_order(molecule);
-    ElectronDensity electron_density(molecule);
-
+    
     std::cout << std::defaultfloat << std::setprecision(6); 
 
     cout << "Overlap matrix:" << endl;
@@ -53,9 +52,6 @@ int main(int argc, char* argv[]) {
     cout<<bond_order.get_mayer_bond_order_matrix() << endl;
     cout<<"Mulliken bond order matrix:" << endl;
     cout<<bond_order.get_mulliken_bond_order_matrix() << endl;
-    cout << "Electron density matrix:" << endl;
-    cout << electron_density.get_electron_density_matrix() << endl;
-
 
 
 
@@ -77,8 +73,6 @@ int main(int argc, char* argv[]) {
         arma::hdf5_opts::append + arma::hdf5_opts::trans));
     bond_order.get_mulliken_bond_order_matrix().save(arma::hdf5_name(output_file_path, "mulliken_bond_order_matrix",
         arma::hdf5_opts::append + arma::hdf5_opts::trans));
-    electron_density.get_electron_density_matrix().save(
-        arma::hdf5_name(output_file_path, "electron_density_matrix", arma::hdf5_opts::append + arma::hdf5_opts::trans));
 
     return EXIT_SUCCESS;
 }

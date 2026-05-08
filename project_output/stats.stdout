@@ -1,0 +1,42 @@
+
+=== STATS: REFERENCE vs. METHODS (C2H4) ===
+Reference vs Wiberg	 | MAE: 0.400000 | STDEV: 0.611010
+Reference vs Mayer	 | MAE: 0.682689 | STDEV: 0.410961
+Reference vs Mulliken	 | MAE: 0.400000 | STDEV: 0.611010
+=================================================
+
+
+=== STATS: REFERENCE vs. METHODS (H2) ===
+Reference vs Wiberg	 | MAE: 0.000000 | STDEV: 0.000000
+Reference vs Mayer	 | MAE: 0.377588 | STDEV: 0.000000
+Reference vs Mulliken	 | MAE: 0.319744 | STDEV: 0.000000
+=================================================
+
+
+=== STATS: REFERENCE vs. METHODS (H2O) ===
+Reference vs Wiberg	 | MAE: 0.012885 | STDEV: 0.009100
+Reference vs Mayer	 | MAE: 0.194703 | STDEV: 0.097173
+Reference vs Mulliken	 | MAE: 0.069227 | STDEV: 0.047551
+=================================================
+
+
+=== STATS: REFERENCE vs. METHODS (HCN) ===
+Reference vs Wiberg	 | MAE: 0.054559 | STDEV: 0.011545
+Reference vs Mayer	 | MAE: 1.115047 | STDEV: 0.655129
+Reference vs Mulliken	 | MAE: 0.787606 | STDEV: 0.665513
+=================================================
+
+
+=== STATS: REFERENCE vs. METHODS (HF) ===
+Reference vs Wiberg	 | MAE: 0.050285 | STDEV: 0.000000
+Reference vs Mayer	 | MAE: 0.147947 | STDEV: 0.000000
+Reference vs Mulliken	 | MAE: 0.009079 | STDEV: 0.000000
+=================================================
+
+
+=== STATS: REFERENCE vs. METHODS (HO) ===
+Reference vs Wiberg	 | MAE: 0.024630 | STDEV: 0.000000
+Reference vs Mayer	 | MAE: 0.234799 | STDEV: 0.000000
+Reference vs Mulliken	 | MAE: 0.083924 | STDEV: 0.000000
+=================================================
+

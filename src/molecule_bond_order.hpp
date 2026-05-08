@@ -229,28 +229,3 @@ class BondOrder{
         void calculate_X_matrix();
 
 };
-
-class ElectronDensity{
-    public:
-    ElectronDensity(const Molecule& mol) : molecule(mol)
-    {
-        FockMatrix fock_matrix(molecule);
-        fock_matrix.find_convergence();
-        density_matrix_total =
-            fock_matrix.get_density_matrix_alpha() + fock_matrix.get_density_matrix_beta();
-        calculate_electron_density();
-    }
-
-    ~ElectronDensity() = default;   
-
-    arma::mat get_electron_density_matrix() const { return electron_density_matrix; }
-    double get_electron_density() const { return electron_density; }
-
-    private:
-        const Molecule& molecule;
-        arma::mat electron_density_matrix;
-        arma::mat density_matrix_total;
-        double electron_density = 0.0;
-
-        void calculate_electron_density();
-};
