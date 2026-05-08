@@ -41,5 +41,6 @@ add_executable(
     src/fock_functions.cpp
     src/sto3g_functions.cpp
     src/bond_order.cpp
-    src/electron_density.cpp
 )
+
+add_executable(calculate_stats src/calculate_stats.cpp)
