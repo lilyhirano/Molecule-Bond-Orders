@@ -35,7 +35,7 @@ def _parse_stdout_matrix(stdout_text: str, label: str) -> np.ndarray:
     return np.array(matrix_rows, dtype=float)
 
 
-@pytest.mark.parametrize("molecule_id", ["H2", "HF", "HO", "H2O"])
+@pytest.mark.parametrize("molecule_id", ["H2", "HF", "HO", "H2O", "HCN", "C2H4"])
 def test_wiberg_bond_order_near_reference(student_output_dir, molecule_id):
     base_dir = Path(__file__).resolve().parent.parent
     csv_path = base_dir / "tests" / "test_checks" / f"{molecule_id}.csv"
