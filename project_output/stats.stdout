@@ -1,8 +1,8 @@
 
 === STATS: REFERENCE vs. METHODS (C2H4) ===
-Reference vs Wiberg	 | MAE: 0.400000 | STDEV: 0.611010
-Reference vs Mayer	 | MAE: 0.682689 | STDEV: 0.410961
-Reference vs Mulliken	 | MAE: 0.400000 | STDEV: 0.611010
+Reference vs Wiberg	 | MAE: 0.079152 | STDEV: 0.065533
+Reference vs Mayer	 | MAE: 0.715738 | STDEV: 0.630873
+Reference vs Mulliken	 | MAE: 0.346202 | STDEV: 0.373588
 =================================================
 
 

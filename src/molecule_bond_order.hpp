@@ -63,17 +63,12 @@ class Molecule{
 
         void build_aos(const STO3G_maps& sto3g);
         void build_overlap_matrix();
-        arma::mat find_SR_A();
     
     private:
         //implemented in molecule_functions.cpp
         void read_atoms_file(); 
         void determine_num_basis_functions(); 
     };
-
-// CNDO/2 valence γ_IJ (eV) and dγ_IJ/d|R_I−R_J| (eV/bohr) for hw_5_2; I≠J only.
-double cndo_gamma_ij_ev(const Molecule& mol, int I, int J);
-double cndo_gamma_ij_dgamma_dR_ev(const Molecule& mol, int I, int J);
 
 class STO3G_maps{
     public:
@@ -113,37 +108,14 @@ class FockMatrix {
 
         ~FockMatrix() = default;
 
-        arma::mat get_fock_matrix_alpha() const { return fock_matrix_alpha; }
-        arma::mat get_fock_matrix_beta() const { return fock_matrix_beta; }
         arma::mat get_density_matrix_alpha() const { return density_matrix_alpha; }
         arma::mat get_density_matrix_beta() const { return density_matrix_beta; }
-        arma::mat get_gamma_matrix() const { return gamma_matrix; }
-        arma::mat get_hamiltonian_matrix() const { return hamiltonian_matrix; }
-        double get_repulsion_energy() const { return repulsion_energy; }
-        double get_electron_energy() const { return electron_energy; }
-        double get_total_energy() const { return total_energy; }
-        arma::vec get_eigenvalues_alpha() const { return eigenvalues_alpha; }
-        arma::vec get_eigenvalues_beta() const { return eigenvalues_beta; }
         
-        void calculate_fock_matrix_alpha(){ assemble_fock_spin(density_matrix_alpha, fock_matrix_alpha); }
-        void calculate_fock_matrix_beta() {assemble_fock_spin(density_matrix_beta, fock_matrix_beta); }
         // calcualte for both alpha and beta
-        void calculate_fock_spin(){ calculate_fock_matrix_alpha(); calculate_fock_matrix_beta(); iterations++; }
-        
-        void calculate_repulsion_energy();
-        void calculate_electon_energy();
-        void calculate_total_energy();
-
-        arma::mat find_gammaAB_RA();
-        
-        void print_focks()
-        {
-            cout<< "Iteration:" << iterations << endl;
-            cout << "Fa" << endl;
-            cout << fock_matrix_alpha << endl;
-            cout << "Fb" << endl;
-            cout << fock_matrix_beta << endl;
-            cout << "after solving eigen equation: " << eigen << endl;
+        void calculate_fock_spin(){
+            assemble_fock_spin(density_matrix_alpha, fock_matrix_alpha);
+            assemble_fock_spin(density_matrix_beta, fock_matrix_beta);
+            iterations++;
         }
 
         void solve_eigenvalue_problem();
@@ -153,9 +125,6 @@ class FockMatrix {
         int p;
         int q;
         int iterations = -1;
-        double repulsion_energy = 0.0;
-        double electron_energy = 0.0;
-        double total_energy = 0.0;
 
         arma::mat density_matrix_alpha;
         arma::mat density_matrix_beta;
@@ -163,8 +132,7 @@ class FockMatrix {
         arma::mat fock_matrix_beta;
         arma::mat prev_density_matrix_alpha;
         arma::mat prev_density_matrix_beta;
-        arma::mat hamiltonian_matrix;
-        arma::mat gamma_matrix;
+
 
         arma::vec eigenvalues_alpha;
         arma::vec eigenvalues_beta;
@@ -173,7 +141,6 @@ class FockMatrix {
         void calculate_gamma_matrix();
 
         void assemble_fock_spin(const arma::mat& P_spin, arma::mat& F_out);
-        void assemble_hamiltonian_matrix();
         bool check_convergence();
 };
 

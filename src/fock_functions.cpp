@@ -22,9 +22,6 @@ FockMatrix::FockMatrix(const Molecule& mol)
     density_matrix_beta.zeros(molecule.num_basis_functions, molecule.num_basis_functions);
     fock_matrix_alpha.zeros(molecule.num_basis_functions, molecule.num_basis_functions);
     fock_matrix_beta.zeros(molecule.num_basis_functions, molecule.num_basis_functions);
-    hamiltonian_matrix.zeros(molecule.num_basis_functions, molecule.num_basis_functions);
-
-    assemble_hamiltonian_matrix();
 }
 
 /// Fock Matrix Creation ///
@@ -203,6 +200,8 @@ void FockMatrix::solve_eigenvalue_problem() {
 
     arma::mat eigenvectors_alpha;
     arma::mat eigenvectors_beta;
+    arma::vec eigenvalues_alpha;
+    arma::vec eigenvalues_beta;
 
     arma::eig_sym(eigenvalues_alpha, eigenvectors_alpha, fock_matrix_alpha);
     arma::eig_sym(eigenvalues_beta, eigenvectors_beta, fock_matrix_beta);
@@ -221,7 +220,6 @@ void FockMatrix::solve_eigenvalue_problem() {
         density_matrix_beta = C_occ_b * C_occ_b.t();
     }
 
-    eigen++;
 }
 
 
@@ -241,151 +239,4 @@ void FockMatrix::find_convergence(){
             break;
         }
     }
-}
-
-
-/// Energy Calculation ///
-
-void hamiltonian_diagonal_elements(const Molecule& mol, const arma::mat& gamma_matrix, arma::mat& hamiltonian_matrix) {
-    const int n_ao = static_cast<int>(mol.aos.size());
-    const int n_atom = mol.num_atoms;
-
-    for (int mu = 0; mu < n_ao; ++mu) {
-        const int A = mol.aos[mu].atom_idx;
-        const Atom& atom_a = mol.atoms[A];
-        
-        const bool is_s = ao_is_valence_s(mol.aos[mu]);
-        const double core = cndo2_core_diagonal_ev(atom_a, is_s);
-
-        const double z_a = atom_a.parameters.at(3);
-
-        const double same_atom_factor = (z_a - 0.5) * gamma_matrix(A, A);
-        double h_mu = core - same_atom_factor;
-
-        for (int B = 0; B < n_atom; ++B) {
-            if (B == A) {
-            continue;
-            }
-            const double z_b = mol.atoms[B].parameters.at(3);
-            h_mu -= z_b * gamma_matrix(A, B);
-        }
-        hamiltonian_matrix(mu, mu) = h_mu;
-    }
-}
-
-void hamiltonian_off_diagonal_elements(const Molecule& mol, const arma::mat& gamma_matrix, const arma::mat& overlap, arma::mat& hamiltonian_matrix) {
-    
-    const int n_ao = static_cast<int>(mol.aos.size());
-
-    for (int mu = 0; mu < n_ao; ++mu) {
-        for (int nu = mu + 1; nu < n_ao; ++nu) {
-            const int A = mol.aos[mu].atom_idx;
-            const int B = mol.aos[nu].atom_idx;
-            const double beta_a = mol.atoms[A].parameters.at(2);
-            const double beta_b = mol.atoms[B].parameters.at(2);
-
-            const double s_mu_nu = overlap(mu, nu);
-
-            const double val = - 0.5 * (beta_a + beta_b) * s_mu_nu;
-            hamiltonian_matrix(mu, nu) = val;
-            hamiltonian_matrix(nu, mu) = val;
-        }
-    }
-}
-
-
-void FockMatrix::assemble_hamiltonian_matrix(){
-    hamiltonian_diagonal_elements(molecule, gamma_matrix, hamiltonian_matrix);
-    hamiltonian_off_diagonal_elements(molecule, gamma_matrix, molecule.overlap_matrix, hamiltonian_matrix);
-}
-
-
-void FockMatrix::calculate_repulsion_energy(){
-    for(int A = 0; A < molecule.num_atoms; ++A){
-        for(int B = 0; B < A; ++B){
-
-            const double z_a = molecule.atoms[A].parameters.at(3);
-            const double z_b = molecule.atoms[B].parameters.at(3);
-            const double R = arma::norm(molecule.atoms[A].center - molecule.atoms[B].center, 2);
-            repulsion_energy += z_a * z_b / R * EV_PER_HARTREE;
-        }
-    }
-}
-
-void FockMatrix::calculate_electon_energy(){
-    electron_energy = 0.0;
-
-    for(int mu = 0; mu < molecule.num_basis_functions; ++mu){
-        for(int nu = 0; nu < molecule.num_basis_functions; ++nu){
-            electron_energy += (hamiltonian_matrix(mu, nu) + fock_matrix_alpha(mu, nu)) * density_matrix_alpha(mu, nu);
-            electron_energy += (hamiltonian_matrix(mu, nu) + fock_matrix_beta(mu, nu)) * density_matrix_beta(mu, nu);
-        }
-    }
-    electron_energy *= 0.5;
-}
-
-void FockMatrix::calculate_total_energy(){
-
-    electron_energy = 0.0;
-    repulsion_energy = 0.0;
-    total_energy = 0.0;
-
-    calculate_repulsion_energy();
-    calculate_electon_energy();
-    total_energy = electron_energy + repulsion_energy;
-}
-
-
-/////////////////////////////////////////////////
-
-double cndo_gamma_ij_ev(const Molecule& mol, int I, int J) { 
-    return gamma_matrix_element(mol, I, J); 
-}
-
-double cndo_gamma_ij_dgamma_dR_ev(const Molecule& mol, int I, int J) {
-    if (I == J) {
-        return 0.0;
-    }
-    const int i_mu = valence_s_ao_index(mol, I);
-    const int i_nu = valence_s_ao_index(mol, J);
-    if (i_mu < 0 || i_nu < 0) {
-        return 0.0;
-    }
-    const AOInfo& oi = mol.aos[i_mu];
-    const AOInfo& oj = mol.aos[i_nu];
-    const double R = arma::norm(mol.atoms[I].center - mol.atoms[J].center, 2);
-    constexpr double h = 1e-8;
-    return (gamma_valence_ss_ev(oi, oj, R + h) - gamma_valence_ss_ev(oi, oj, R - h)) / (2.0 * h);
-}
-
-
-
-////// 
-arma::mat FockMatrix::find_gammaAB_RA()
-{
-  const int num_atoms = molecule.num_atoms;
-  arma::mat gammaAB_RA(3, num_atoms * num_atoms, arma::fill::zeros);
-
-for (int I = 0; I < molecule.num_atoms; ++I) { //iterate through each atom
-  for (int J = 0; J < molecule.num_atoms; ++J) {
-    
-    const int col = I * molecule.num_atoms + J;
-    if (I == J) {
-      continue;
-    }
-    arma::vec r_ab = molecule.atoms[I].center - molecule.atoms[J].center;
-    const double r = arma::norm(r_ab, 2);
-    if (r < 1e-14) { //skip if the distance is too small
-      continue;
-    }
-    r_ab /= r;
-    const double dg = cndo_gamma_ij_dgamma_dR_ev(molecule, I, J);
-
-    gammaAB_RA(0, col) = dg * r_ab(0);  //
-    gammaAB_RA(1, col) = dg * r_ab(1);
-    gammaAB_RA(2, col) = dg * r_ab(2);
-    }
-    }
-
-    return gammaAB_RA;
 }
