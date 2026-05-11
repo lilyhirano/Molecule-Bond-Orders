@@ -1,6 +1,6 @@
 {   
     "atoms_file_path" : "atoms/C2H4.xyz",
     "output_file_path" : "project_output/final_proj_hdf5/C2H4.hdf5",
-    "num_alpha_electrons" : 12,
-    "num_beta_electrons" : 12
+    "num_alpha_electrons" : 6,
+    "num_beta_electrons" : 6
 }
